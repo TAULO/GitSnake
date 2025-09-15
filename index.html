@@ -2389,6 +2389,11 @@
 
     let score = 1;
 
+    // remove github events on keydown
+    document.querySelectorAll('[data-hotkey]').forEach(el => {
+        el.removeAttribute('data-hotkey');
+    });
+
     document.addEventListener('keypress', (event) => {
         switch (event.key) {
             case 'w':
@@ -2498,7 +2503,7 @@
 
     function drawSnake() {
         snake.forEach((pos, index) => {
-            const level = index === 0 ? 3 : 1;
+            const level = index === 0 ? 3 : 2;
             contributionGrid[pos.y][pos.x].setAttribute('data-level', level);
         });
     }
