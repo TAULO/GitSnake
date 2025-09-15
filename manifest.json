@@ -1,0 +1,16 @@
+{
+    "name": "GitSnake",
+    "description": "Play the game snake on GitHub Contributions",
+    "version": "1.0",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "js": [
+                "scripts/index.js"
+            ],
+            "matches": [
+                "https://github.com/*"
+            ]
+        }
+    ]
+}
