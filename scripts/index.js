@@ -10,25 +10,17 @@ let directons = {
 
 let currDirection = directons.RIGHT;
 
-function waitForContributions(callback) {
-    const interval = setInterval(() => {
-        const grid = document.querySelector('.ContributionCalendar-grid');
-        if (grid && gameStarted) {
-            clearInterval(interval);
-            callback(grid);
-        }
-    }, 100); // check every 100ms
-}
-
 function reset() {
     const contributionArray = [...document.querySelectorAll('.ContributionCalendar-grid .ContributionCalendar-day')];
     contributionArray.forEach(contribution => contribution.setAttribute('data-level', 0));
 }
 
 // remove github events on keydown
-document.querySelectorAll('[data-hotkey]').forEach(el => {
-    el.removeAttribute('data-hotkey');
-});
+setInterval(() => {
+    document.querySelectorAll('[data-hotkey]').forEach(el => {
+        el.removeAttribute('data-hotkey');
+    });
+}, 1000)
 
 document.addEventListener('keypress', (event) => {
     switch (event.key) {
@@ -47,8 +39,9 @@ document.addEventListener('keypress', (event) => {
     }
 });
 
-waitForContributions((grid) => {
-    contributionGrid = [...grid.querySelectorAll('tr')]
+function main() {
+    const grid = document.querySelector('.ContributionCalendar-grid');
+    const contributionGrid = [...grid.querySelectorAll('tr')]
         .map(tr => tr.querySelectorAll('.ContributionCalendar-day'))
         .filter(arr => arr.length > 0);
 
@@ -202,9 +195,10 @@ waitForContributions((grid) => {
 
         score++;
     }
-});
+}
 
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    gameStarted = message.gameStarted;
+    console.log(message)
+    main();
 });
