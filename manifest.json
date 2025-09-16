@@ -10,7 +10,11 @@
             ],
             "matches": [
                 "https://github.com/*"
-            ]
+            ],
+            "run_at": "document_idle"
         }
-    ]
+    ],
+    "action": {
+        "default_popup": "./index.html"
+    }
 }

@@ -1,5 +1,5 @@
-
 const GAME_SPEED = 150;
+let gameStarted = false;
 
 let directons = {
     UP: 'UP',
@@ -13,7 +13,7 @@ let currDirection = directons.RIGHT;
 function waitForContributions(callback) {
     const interval = setInterval(() => {
         const grid = document.querySelector('.ContributionCalendar-grid');
-        if (grid) {
+        if (grid && gameStarted) {
             clearInterval(interval);
             callback(grid);
         }
@@ -54,9 +54,14 @@ waitForContributions((grid) => {
 
     reset();
 
+    const contributionDescription = document.getElementById('js-contribution-activity-description');
+    const originalContributionDescriptionText = contributionDescription.innerText.split(' ');
+
     let moveX = 0;
     let moveY = 0;
-    let score = 1;
+    let score = 0;
+
+    updateScore();
 
     let snake = [{ x: 0, y: 0 }];
     let prevTailPosition = null;
@@ -79,7 +84,6 @@ waitForContributions((grid) => {
 
         let ranX = generateRanX();
         let ranY = generateRanY();
-
 
         while (isSnakeIntersectingFruit(ranX, ranY)) {
             ranX = generateRanX();
@@ -160,7 +164,7 @@ waitForContributions((grid) => {
         const head = snake[0];
 
         if (head.x === fruitX && head.y === fruitY) {
-            score++;
+            updateScore();
 
             // Add a new segment at the previous tail position
             if (prevTailPosition) {
@@ -191,4 +195,16 @@ waitForContributions((grid) => {
             return false
         }).length > 0;
     }
+
+    function updateScore() {
+        originalContributionDescriptionText[0] = score;
+        contributionDescription.innerText = originalContributionDescriptionText.join(' ');
+
+        score++;
+    }
+});
+
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    gameStarted = message.gameStarted;
 });
