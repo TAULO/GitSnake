@@ -18,8 +18,6 @@ document.querySelector("button").addEventListener("click", async (e) => {
     function sendWhenReady(tabId, message) {
         // Check if tab is already complete
         chrome.tabs.get(tabId, (tabInfo) => {
-            console.log(tabInfo)
-
             if (tabInfo.status === "complete") {
                 chrome.tabs.sendMessage(tabId, message);
             } else {
@@ -27,7 +25,7 @@ document.querySelector("button").addEventListener("click", async (e) => {
                 function listener(updatedTabId, changeInfo, updatedTab) {
                     if (updatedTabId === tabId && changeInfo.status === "complete") {
                         chrome.tabs.sendMessage(tabId, message);
-                        chrome.tabs.onUpdated.removeListener(listener); // remove listener once done
+                        chrome.tabs.onUpdated.removeListener(listener);
                     }
                 }
                 chrome.tabs.onUpdated.addListener(listener);
@@ -35,7 +33,6 @@ document.querySelector("button").addEventListener("click", async (e) => {
         });
     }
 
-    // Usage
     sendWhenReady(tab.id, { gameStarted: true });
     window.close();
 });
