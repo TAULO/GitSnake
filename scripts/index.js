@@ -172,7 +172,7 @@ function main() {
     }
 
     function gameOver() {
-        reset();
+        localStorage.setItem('git-snake-score', score);
         snake = [{ x: 0, y: 0 }];
         score = 0;
     }
@@ -185,7 +185,7 @@ function main() {
                 return true;
             }
 
-            return false
+            return false;
         }).length > 0;
     }
 

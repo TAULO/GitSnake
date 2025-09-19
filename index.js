@@ -33,6 +33,10 @@ document.querySelector("button").addEventListener("click", async (e) => {
         });
     }
 
-    sendWhenReady(tab.id, { gameStarted: true });
-    window.close();
+    try {
+        sendWhenReady(tab.id, { gameStarted: true });
+        window.close();
+    } catch (e) {
+        console.log(e);
+    }
 });
