@@ -9,6 +9,9 @@ let directons = {
 }
 
 let currDirection = directons.RIGHT;
+firstElementChild = null
+
+const scores = [];
 
 function reset() {
     const contributionArray = [...document.querySelectorAll('.ContributionCalendar-grid .ContributionCalendar-day')];
@@ -46,6 +49,10 @@ function main() {
         .filter(arr => arr.length > 0);
 
     reset();
+
+    const yearListContainerList = document.getElementById('year-list-container').querySelector('ul');
+    firstElementChild = yearListContainerList.firstElementChild;
+    yearListContainerList.innerHTML = ''
 
     const contributionDescription = document.getElementById('js-contribution-activity-description');
     const originalContributionDescriptionText = contributionDescription.innerText.split(' ');
@@ -134,7 +141,7 @@ function main() {
 
                 if (head.x === x && head.y === y) {
                     console.log('GAME OVER');
-                    // gameOver();
+                    gameOver();
                 }
             }
         })
@@ -172,9 +179,33 @@ function main() {
     }
 
     function gameOver() {
-        localStorage.setItem('git-snake-score', score);
+        scores.push(score);
+        const clones = [];
+
+        const yearListContainerList = document.getElementById('year-list-container').querySelector('ul');
+        yearListContainerList.innerHTML = '';
+
+        const maxScore = Math.max(...scores);
+
+        scores.forEach(currScore => {
+            const clone = firstElementChild.cloneNode(true);
+            const a = clone.querySelector('a');
+            a.innerText = currScore;
+
+            if (currScore === maxScore) {
+                a.setAttribute('aria-current', true);
+            } else {
+                a.removeAttribute('aria-current');
+            }
+
+            yearListContainerList.appendChild(clone);
+        })
+
         snake = [{ x: 0, y: 0 }];
+        moveX = 0;
+        moveY = 0;
         score = 0;
+        prevTailPosition = null;
     }
 
     function isSnakeIntersectingFruit(currFruitX, currFruitY) {
